@@ -1,0 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@1,300&display=swap");
+.navlink:hover {
+  color: rgba(255, 0, 106, 0.829) !important;
+}
+.navlink {
+  font-family: "Times New Roman", Times, serif;
+}
+.navlink {
+  display: inline-block;
+  position: relative;
+  color: #00000093;
+}
+
+.navlink:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ca0000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.navlink:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+.navlink_:hover {
+  color: rgba(255, 0, 106, 0.829) !important;
+}
+.navlink_ {
+  font-family: "Times New Roman", Times, serif;
+}
+.navlink_ {
+  display: inline-block;
+  position: relative;
+  color: #00000093;
+  margin-right: 0;
+}
+
+.navlink_:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #ca0000;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.navlink_:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.search_click {
+  border: 1px solid #ccc;
+  outline: none;
+  background-size: 22px;
+  background-position: 13px;
+  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  padding: 25px;
+  transition: all 0.5s;
+}
+.search_click:focus {
+  width: 300px;
+  padding-left: 50px;
+}
+.search_click {
+  position: relative;
+  overflow: hidden;
+  height: 50px;
+}
+.search_click input {
+  background: transparent;
+  border: 1px solid #ccc;
+  outline: none;
+  position: absolute;
+  width: 300px;
+  height: 40px;
+  left: 0%;
+  padding: 10px;
+}
