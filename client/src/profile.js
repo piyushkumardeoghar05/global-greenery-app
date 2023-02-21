@@ -12,6 +12,8 @@ import {
 } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "./api";
+import { Link, useNavigate } from "react-router-dom";
+
 import {
   faFacebookF,
   faGithub,
@@ -27,6 +29,8 @@ import { useParams } from "react-router-dom";
 import Signup from "./signup";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 export default function PersonalProfile() {
+  const navigate = useNavigate();
+
   let { id } = useParams();
   const [data, setData] = useState([]);
   useEffect(()=>{
@@ -34,9 +38,32 @@ export default function PersonalProfile() {
     axios.get(`/user/${id}`).then((res) => {
       console.log(res.data["user"]);
       setData(res.data["user"]);
-    });
+    }).catch((err)=>{
+      if(err) console.log(err);
+    })
   },[])
+const handleDelete=()=>{
+  axios.delete(`/user/${id}`).then((res)=>{
+    if(res.data.successMessage){
+      alert("Your account has been deleted successfully")
+      navigate(`/signup/0/0`);
 
+    }
+  }).catch((err)=>{
+    if(err) console.log(err);
+  })
+};
+const handleLogout=()=>{
+  axios.post(`/user/logout`).then((res)=>{
+    if(res.data.successMessage){
+      alert("Logout Successful")
+      navigate(`/login`);
+
+    }
+  }).catch((err)=>{
+    if(err) console.log(err);
+  })
+};
   return (
     <section className="vh-100" style={{ backgroundColor: "#f4f5f7" }}>
       <MDBContainer className="py-5 h-100">
@@ -130,7 +157,9 @@ export default function PersonalProfile() {
                           style={{ margin: "10px" }}
                         />
                       </a>
+                      <button id="deleteBtn" onClick={handleDelete} type="button" class="mx-3 btn btn-danger">Delete Account</button>
                     </div>
+                    <button id="logoutBtn" onClick={handleLogout} type="button" class="btn btn-dark">Logout</button>
                   </MDBCardBody>
                 </MDBCol>
               </MDBRow>

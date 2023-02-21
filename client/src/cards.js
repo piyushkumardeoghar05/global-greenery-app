@@ -43,13 +43,16 @@ function GroupExample() {
       items: 1,
     },
   };
-  axios
-    .get('/topThreeCards/get')
-    .then((res) => {
-      // console.log(res.data['cards']);
-      setStudData(res.data['cards']);
-    })
-    .catch((err) => console.log(err));
+  useEffect(()=>{
+    axios
+      .get('/topThreeCards/get')
+      .then((res) => {
+        // console.log(res.data['cards']);
+        setStudData(res.data['cards']);
+      })
+      .catch((err) => console.log(err));
+    
+  },[])
     // useEffect
   // const StudData = [
     // {

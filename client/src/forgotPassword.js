@@ -10,8 +10,8 @@ const ForgotPassword = () => {
   const [passw, setPassw] = useState("");
   const [dataInput, setDataInput] = useState("");
   const [id, setId] = useState(null);
-  const [error, setError] = useState(false);
-  const [success,setSuccess] = useState(false);
+  const [error, setError] = useState("");
+  const [success,setSuccess] = useState("");
   const navigate = useNavigate();
   const submitThis = async (e) => {
     e.preventDefault();
@@ -23,14 +23,16 @@ const ForgotPassword = () => {
     axios
       .post("/user/forgotPassword", conFom)
       .then((res) => {
-        if (res.data) {
+        if (res.data.successMessage) {
           console.log("code is sent on your email");
-          setSuccess(true);
+          setSuccess("Reset Link has been successfully sent to your registered Email Id,Please check your Email");
           // setId(res.data["user"]._id);
           //   navigate(`/profile/${res.data["user"]._id}`);
+          setError(res.data.errorMessage);
         } else {
           console.log("Email not registered");
-          setError(true);
+          setError(res.data.errorMessage);
+          setSuccess("");
         }
       })
       .catch((err) => console.log(err));
@@ -41,7 +43,9 @@ const ForgotPassword = () => {
   // useEffect(()=>{
   //   setError(false)
   // },[])
-
+useEffect(()=>{
+  setError("");
+},[])
 
   return (
     <>
@@ -78,17 +82,17 @@ const ForgotPassword = () => {
                 >
                   Send Reset Code
                 </button>
-                {error && (
+                {/* {error && ( */}
                   <h5 style={{ color: "red" }}>
-                    No such Email found, You are not registered please{" "}
+                    {error}{" "}
                    
                   </h5>
-                )}
-                {success && (
+                {/* // )} */}
+                {/* {success && ( */}
                   <h5 style={{ color: "red" }}>
-                    Reset Link has been successfully sent to your registered Email Id,Please check your Email {" "}
+                    {success} {" "}
                   </h5>
-                )}
+                {/* )} */}
               </form>
             </div>
           </div>

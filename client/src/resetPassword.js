@@ -5,7 +5,6 @@ import Navbar from "./navbar";
 import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 
-
 import {
   faUser,
   faSignIn,
@@ -17,7 +16,7 @@ import {
   faImage,
 } from "@fortawesome/free-solid-svg-icons";
 const ResetPassword = () => {
-  let { id} = useParams();
+  let { id } = useParams();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -30,18 +29,18 @@ const ResetPassword = () => {
   const [initialpor, setInitialPor] = useState("");
   const [initialimgLink, setInitialImgLink] = useState("");
   const [initialPhone, setInitialPhone] = useState("");
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
   // const [initialEmail, setInitialEmail] = useState("");
-    // console.log("upadte is going on");
-    // try {
-    //   axios.get(`/user/${id}`).then((res) => {
-    //     console.log(res.data.user.email);
-    //     console.log(res.data.user.name);
-    //   });
-    // } catch (err) {
-    //   if (err) console.log(err.message);
-    // }
-  
+  // console.log("upadte is going on");
+  // try {
+  //   axios.get(`/user/${id}`).then((res) => {
+  //     console.log(res.data.user.email);
+  //     console.log(res.data.user.name);
+  //   });
+  // } catch (err) {
+  //   if (err) console.log(err.message);
+  // }
+
   const submitForm = (e) => {
     e.preventDefault();
     const { password, conpass } = e.target.elements;
@@ -51,24 +50,22 @@ const ResetPassword = () => {
     };
 
     //   console.log("upadte is going on");
-      try {
-        axios.patch(`/user/${id}`, conFom).then((res) => {
-          if(res.data.successMessage){
-            console.log(res.data.user);
-            console.log("password successfully changed");
-            navigate(`/login`);
+    try {
+      axios.patch(`/user/${id}`, conFom).then((res) => {
+        if (res.data.successMessage) {
+          console.log(res.data.user);
+          console.log("password successfully changed");
+          alert("Your Password has been changed");
+          navigate(`/login`);
+        } else {
+          setError(res.data.errorMessage);
+        }
 
-          }
-          else{
-            setError(res.data.errorMessage);
-          }
-
-          // setInitialEmail(res.data.user.email);
-        });
-      } catch (err) {
-        if (err) console.log(err.message);
-      }
-     
+        // setInitialEmail(res.data.user.email);
+      });
+    } catch (err) {
+      if (err) console.log(err.message);
+    }
   };
   return (
     <>
@@ -130,7 +127,7 @@ const ResetPassword = () => {
                           {/* Register */}
                         </button>
                       </div>
-                      <h5 style={{color:"red"}}>{error}</h5>
+                      <h5 style={{ color: "red" }}>{error}</h5>
                       {/* {isRegistered == 2 && (
                         <>
                           <div style={{ color: "red" }}>

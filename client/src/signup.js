@@ -30,7 +30,8 @@ const SignUp = () => {
   const [initialimgLink, setInitialImgLink] = useState("");
   const [initialPhone, setInitialPhone] = useState("");
   const [initialpassword, setInitialPassword] = useState("");
-  const [error,setError] = useState("");
+  const [isDisabled,setIsDisabled] = useState(false);
+  const [error, setError] = useState("");
   // const [changepass, setChangePass] = useState(false);
   // const [initialEmail, setInitialEmail] = useState("");
   useEffect(() => {
@@ -73,10 +74,9 @@ const SignUp = () => {
         axios.patch(`/user/${id}`, conFom).then((res) => {
           if (res.data.successMessage) {
             console.log(res.data.user.email);
+            alert("Profile Successfully updated");
             navigate(`/profile/${res.data["user"]._id}`);
-
-          }
-          else{
+          } else {
             setError(res.data.errorMessage);
           }
           // setInitialEmail(res.data.user.email);
@@ -89,11 +89,10 @@ const SignUp = () => {
       try {
         axios.post("/user", conFom).then((res) => {
           console.log(res);
-          if(res.data.successMessage){
+          if (res.data.successMessage) {
+            alert("Succcessfully registered, Now please sign in");
             navigate(`/login`);
-
-          }
-          else{
+          } else {
             setError(res.data.errorMessage);
           }
         });
@@ -107,6 +106,14 @@ const SignUp = () => {
       }
     }
   };
+const handleChange=()=>{
+if(isDisabled){
+  setIsDisabled(false);
+}
+  else{
+setIsDisabled(true);
+  }
+}
   // const handleChange = ()=>{
   //   if(changepass){
   //     setChangePass(true);
@@ -146,11 +153,7 @@ const SignUp = () => {
                 <div className="row justify-content-center">
                   <div className="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                     <p className="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                    {toUpdate == "0" ? (
-                              <>SIGN UP</>
-                            ) : (
-                              <>Update Profile</>
-                            )}
+                      {toUpdate == "0" ? <>SIGN UP</> : <>Update Profile</>}
                     </p>
 
                     <form className="mx-1 mx-md-4" onSubmit={submitForm}>
@@ -331,22 +334,24 @@ const SignUp = () => {
                           </label>
                         </div>
                       </div>
-                      <div className="form-check d-flex justify-content-center mb-5">
+                       <><div className="form-check d-flex justify-content-center mb-5">
                         <input
                           class="form-check-input me-2"
                           type="checkbox"
                           value=""
                           id="form2Example3c"
+                          onChange={handleChange}
                         />
                         <label className="form-check-label" for="form2Example3">
                           I agree all statements in{" "}
                           <a href="#">Terms of service</a>
                         </label>
-                      </div>
+                      </div></>
                       <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button
                           type="submit"
                           className="btn btn-primary btn-lg"
+                          disabled={!(isDisabled)}
                         >
                           {console.log(toUpdate)}
                           {toUpdate == "0" ? (
@@ -357,7 +362,7 @@ const SignUp = () => {
                           {/* Register */}
                         </button>
                       </div>
-                      <h5 style={{color:"red"}}>{error}</h5>
+                      <h5 style={{ color: "red" }}>{error}</h5>
                       {/* {isRegistered == 2 && (
                         <>
                           <div style={{ color: "red" }}>

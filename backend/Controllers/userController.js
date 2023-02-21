@@ -55,14 +55,18 @@ exports.createUser = async (req, res, next) => {
     });
   }
 };
-exports.getUser = async (req, res, next) => {
+exports.login = async (req, res, next) => {
   try {
     let { email, password } = req.body;
     let user = await userModel.findOne({ email: email });
     console.log(user);
     if (user) {
       if (password == user.password) {
-        res.setHeader("Set-Cookie", "isLoggedIn=true");
+        // res.setHeader('Set-Cookie', 'isLoggedin=true');
+        res.setHeader('Set-Cookie', 'isLoggedin=true; HttpOnly');
+        if(user.role=='admin' || user.role =='superadmin'){
+          res.setHeader('Set-Cookie', 'isAdmin=true; HttpOnly');
+        }
         console.log("User login successsful");
 
         return res.json({
@@ -80,8 +84,9 @@ exports.getUser = async (req, res, next) => {
     } else {
       console.log("No such email id exists");
       // return res.send(null);
+
       return res.json({
-        errorMessage: "wrong credentials",
+        errorMessage: `No account is associated with this email id, please signUp first`,
       });
     }
   } catch (err) {
@@ -91,6 +96,42 @@ exports.getUser = async (req, res, next) => {
     });
   }
 };
+exports.logout = async(req,res,next)=>{
+  try{
+    let cookies = {};
+    if (req.headers.cookie) {
+      const cookiesArray = req.headers.cookie.split(";");
+
+      cookiesArray.forEach((cookie) => {
+        const [key, value] = cookie.trim().split("=");
+        cookies[key] = value;
+      });
+      console.log(cookies);
+      console.log(cookies["isLoggedin"]);
+      // res.json(cookies);
+      // console.log(req.cookies);
+      if (cookies["isLoggedin"]=='true') {
+        res.setHeader('Set-Cookie', 'isLoggedin=false;HttpOnly');
+        // console.log("user logged in verified");
+        // next();
+      }
+      if(cookies['isAdmin']=='true'){
+
+        res.setHeader('Set-Cookie', 'isAdmin=false; HttpOnly');
+      }
+      return res.json({
+        successMessage:"You are successfully logged out"
+      })
+    }
+
+  }catch (err) {
+    if (err) console.log(err.message);
+    return res.json({
+      errorMessage: err.message,
+    });
+  }
+
+}
 exports.getUserById = async (req, res, next) => {
   try {
     const id = req.params["id"];
@@ -201,11 +242,17 @@ exports.isAuthenticated = async (req, res, next) => {
         cookies[key] = value;
       });
       console.log(cookies);
+      console.log(cookies["isLoggedin"]);
       // res.json(cookies);
       // console.log(req.cookies);
-      if (cookies["isLoggedIn"]) {
+      if (cookies["isLoggedin"]=='true') {
         console.log("user logged in verified");
         next();
+      }
+      else{
+        return res.json({
+          errorMessage: "Operation not allowed",
+        });
       }
     }
     // console.log("Is Logged In");
@@ -223,8 +270,36 @@ exports.isAuthenticated = async (req, res, next) => {
   }
 };
 exports.isAdmin = async (req, res, next) => {
-  console.log("Is Admin");
-  next();
+  try {
+    let cookies = {};
+    if (req.headers.cookie) {
+      const cookiesArray = req.headers.cookie.split(";");
+
+      cookiesArray.forEach((cookie) => {
+        const [key, value] = cookie.trim().split("=");
+        cookies[key] = value;
+      });
+      console.log(cookies);
+      // res.json(cookies);
+      // console.log(req.cookies);
+      if (cookies["isAdmin"]=='true') {
+        console.log("Admin logged in verified");
+        next();
+      }
+    }
+    // console.log("Is Logged In");
+    else {
+      // console.log("Operation not allowed");
+      return res.json({
+        errorMessage: "Operation not allowed",
+      });
+    }
+  } catch (err) {
+    if (err) console.log(err.message);
+    return res.json({
+      errorMessage: err.message,
+    });
+  }
 };
 // exports.forgotPassword = async (req, res, next) => {
 //   const { email } = req.body;

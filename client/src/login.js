@@ -19,7 +19,7 @@ const Login = () => {
     };
     console.log(conFom);
     axios
-      .post("/user/getUser", conFom)
+      .post("/user/login", conFom)
       .then((res) => {
         // if (res.data) {
         //   console.log(res.data["user"]._id);
