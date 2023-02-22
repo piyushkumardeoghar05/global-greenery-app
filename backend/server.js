@@ -2,15 +2,17 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require('cors');
+require('dotenv').config();
 const BASE_URL = process.env.BASE_URL;
+console.log(BASE_URL);
 const corsOptions ={
-  origin:'http://localhost:3000', 
+  origin:`${BASE_URL}`, 
   credentials:true,            //access-control-allow-credentials:true
   optionSuccessStatus:200
 }
 app.use(cors(corsOptions));
-require('dotenv').config();
 app.use(express.json());
+app.use(express.static('public/build'));
 const contactUsRouter = require("./Routes/contactUsRouter");
 const topThreeCardsRouter = require("./Routes/topThreeCardsRouter");
 const ourTeamRouter = require("./Routes/ourTeamRouter");
@@ -19,7 +21,7 @@ const galleryRouter = require("./Routes/galleryRouter");
 const testimonialsRouter = require("./Routes/testimonialsRouter");
 const uri = process.env.URI;
 // console.log(uri);
-const port = 5000;
+const port = process.env.PORT || 5000;
 mongoose
   .connect(uri)
   .then(() => {
