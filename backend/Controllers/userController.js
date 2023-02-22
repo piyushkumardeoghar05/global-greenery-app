@@ -1,9 +1,16 @@
 const userModel = require("../Models/userModel");
-// const cookieParser = require("cookie-parser");
-// const express = require("express");
-// const app = express();
-// app.use(cookieParser());
+const cookieParser = require("cookie-parser");
+const express = require("express");
+const app = express();
+app.use(cookieParser());
+const bcrypt = require("bcrypt");
+const jwt = require('jsonwebtoken');
 const { MailSender } = require("../utility/nodemailer");
+const jwt_key = process.env.JWT_KEY;
+async function comparePassword(plaintextPassword, hash) {
+  const result = await bcrypt.compare(plaintextPassword, hash);
+  return result;
+}
 exports.forgotPassword = async (req, res, next) => {
   try {
     let { email } = req.body;
@@ -27,8 +34,8 @@ exports.forgotPassword = async (req, res, next) => {
     } else {
       // return res.send(null);
       return res.json({
-        errorMessage:"Email id is not registered"
-      })
+        errorMessage: "Email id is not registered",
+      });
     }
   } catch (err) {
     if (err) console.log(err.message);
@@ -61,11 +68,15 @@ exports.login = async (req, res, next) => {
     let user = await userModel.findOne({ email: email });
     console.log(user);
     if (user) {
-      if (password == user.password) {
+     
+     let isCorrect = await comparePassword(password,user.password)
+      if (isCorrect) {
+        let uid = user._id;
+        let jwt_sign = jwt.sign({payload:uid},jwt_key) 
         // res.setHeader('Set-Cookie', 'isLoggedin=true');
-        res.setHeader('Set-Cookie', 'isLoggedin=true; HttpOnly');
-        if(user.role=='admin' || user.role =='superadmin'){
-          res.setHeader('Set-Cookie', 'isAdmin=true; HttpOnly');
+        res.setHeader("Set-Cookie", `isLoggedin=${jwt_sign}; HttpOnly`);
+        if (user.role == "admin" || user.role == "superadmin") {
+          res.setHeader("Set-Cookie", `isAdmin=${jwt_sign}; HttpOnly`);
         }
         console.log("User login successsful");
 
@@ -96,8 +107,8 @@ exports.login = async (req, res, next) => {
     });
   }
 };
-exports.logout = async(req,res,next)=>{
-  try{
+exports.logout = async (req, res, next) => {
+  try {
     let cookies = {};
     if (req.headers.cookie) {
       const cookiesArray = req.headers.cookie.split(";");
@@ -110,28 +121,25 @@ exports.logout = async(req,res,next)=>{
       console.log(cookies["isLoggedin"]);
       // res.json(cookies);
       // console.log(req.cookies);
-      if (cookies["isLoggedin"]=='true') {
-        res.setHeader('Set-Cookie', 'isLoggedin=false;HttpOnly');
+      if (cookies["isLoggedin"]) {
+        res.setHeader("Set-Cookie", "isLoggedin=;HttpOnly;expires=Thu, 01 Jan 1970 00:00:00 GMT");
         // console.log("user logged in verified");
         // next();
       }
-      if(cookies['isAdmin']=='true'){
-
-        res.setHeader('Set-Cookie', 'isAdmin=false; HttpOnly');
+      if (cookies["isAdmin"]) {
+        res.setHeader("Set-Cookie", "isAdmin=; HttpOnly;expires=Thu, 01 Jan 1970 00:00:00 GMT");
       }
       return res.json({
-        successMessage:"You are successfully logged out"
-      })
+        successMessage: "You are successfully logged out",
+      });
     }
-
-  }catch (err) {
+  } catch (err) {
     if (err) console.log(err.message);
     return res.json({
       errorMessage: err.message,
     });
   }
-
-}
+};
 exports.getUserById = async (req, res, next) => {
   try {
     const id = req.params["id"];
@@ -146,8 +154,8 @@ exports.getUserById = async (req, res, next) => {
     } else {
       // return res.send(null);
       return res.json({
-        errorMessage:"user not found"
-      })
+        errorMessage: "user not found",
+      });
     }
   } catch (err) {
     if (err) console.log(err.message);
@@ -245,11 +253,12 @@ exports.isAuthenticated = async (req, res, next) => {
       console.log(cookies["isLoggedin"]);
       // res.json(cookies);
       // console.log(req.cookies);
-      if (cookies["isLoggedin"]=='true') {
+      let isVerified = jwt.verify(cookies['isLoggedin'],jwt_key);
+      console.log(isVerified);
+      if (isVerified) {
         console.log("user logged in verified");
         next();
-      }
-      else{
+      } else {
         return res.json({
           errorMessage: "Operation not allowed",
         });
@@ -282,7 +291,9 @@ exports.isAdmin = async (req, res, next) => {
       console.log(cookies);
       // res.json(cookies);
       // console.log(req.cookies);
-      if (cookies["isAdmin"]=='true') {
+      let isVerified = jwt.verify(cookies['isAdmin'],jwt_key);
+
+      if (isVerified) {
         console.log("Admin logged in verified");
         next();
       }

@@ -30,7 +30,7 @@ const SignUp = () => {
   const [initialimgLink, setInitialImgLink] = useState("");
   const [initialPhone, setInitialPhone] = useState("");
   const [initialpassword, setInitialPassword] = useState("");
-  const [isDisabled,setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [error, setError] = useState("");
   // const [changepass, setChangePass] = useState(false);
   // const [initialEmail, setInitialEmail] = useState("");
@@ -39,6 +39,9 @@ const SignUp = () => {
       console.log("update is going on");
       try {
         axios.get(`/user/${id}`).then((res) => {
+          if (!res.data.user) {
+            navigate(`/login`);
+          }
           console.log(res.data.user.email);
           console.log(res.data.user.name);
           setInitialEmail(res.data.user.email);
@@ -106,14 +109,13 @@ const SignUp = () => {
       }
     }
   };
-const handleChange=()=>{
-if(isDisabled){
-  setIsDisabled(false);
-}
-  else{
-setIsDisabled(true);
-  }
-}
+  const handleChange = () => {
+    if (isDisabled) {
+      setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
+    }
+  };
   // const handleChange = ()=>{
   //   if(changepass){
   //     setChangePass(true);
@@ -334,24 +336,29 @@ setIsDisabled(true);
                           </label>
                         </div>
                       </div>
-                       <><div className="form-check d-flex justify-content-center mb-5">
-                        <input
-                          class="form-check-input me-2"
-                          type="checkbox"
-                          value=""
-                          id="form2Example3c"
-                          onChange={handleChange}
-                        />
-                        <label className="form-check-label" for="form2Example3">
-                          I agree all statements in{" "}
-                          <a href="#">Terms of service</a>
-                        </label>
-                      </div></>
+                      <>
+                        <div className="form-check d-flex justify-content-center mb-5">
+                          <input
+                            class="form-check-input me-2"
+                            type="checkbox"
+                            value=""
+                            id="form2Example3c"
+                            onChange={handleChange}
+                          />
+                          <label
+                            className="form-check-label"
+                            for="form2Example3"
+                          >
+                            I agree all statements in{" "}
+                            <a href="#">Terms of service</a>
+                          </label>
+                        </div>
+                      </>
                       <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                         <button
                           type="submit"
                           className="btn btn-primary btn-lg"
-                          disabled={!(isDisabled)}
+                          disabled={!isDisabled}
                         >
                           {console.log(toUpdate)}
                           {toUpdate == "0" ? (

@@ -37,6 +37,9 @@ export default function PersonalProfile() {
 
     axios.get(`/user/${id}`).then((res) => {
       console.log(res.data["user"]);
+      if(!(res.data["user"])){
+        navigate(`/login`)
+      }
       setData(res.data["user"]);
     }).catch((err)=>{
       if(err) console.log(err);
@@ -80,7 +83,7 @@ const handleLogout=()=>{
                   }}
                 >
                   <MDBCardImage
-                    src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava1-bg.webp"
+                    src={data.imgLink}
                     alt="Avatar"
                     className="my-5"
                     style={{ width: "80px" }}
@@ -133,7 +136,7 @@ const handleLogout=()=>{
                     </MDBRow>
 
                     <div className="d-flex justify-content-start">
-                      <a href="#">
+                      <a href={data.fb}>
                         <FontAwesomeIcon
                           icon={faFacebookF}
                           size="1x"
@@ -141,7 +144,7 @@ const handleLogout=()=>{
                           style={{ margin: "10px" }}
                         />
                       </a>
-                      <a href="#">
+                      <a href={data.twitter}>
                         <FontAwesomeIcon
                           icon={faTwitter}
                           size="1x"
@@ -149,7 +152,7 @@ const handleLogout=()=>{
                           style={{ margin: "10px" }}
                         />
                       </a>
-                      <a href="#">
+                      <a href={data.insta}>
                         <FontAwesomeIcon
                           icon={faInstagram}
                           size="1x"

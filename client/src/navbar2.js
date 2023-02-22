@@ -85,7 +85,7 @@ function Navbar2() {
                       />
                       LOGIN
                     </NavDropdown.Item>
-                    <NavDropdown.Item href="/signup">
+                    <NavDropdown.Item href="/signup/0/0">
                       <FontAwesomeIcon
                         icon={faSignIn}
                         size="1x"

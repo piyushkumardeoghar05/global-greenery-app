@@ -51,7 +51,7 @@ const ResetPassword = () => {
 
     //   console.log("upadte is going on");
     try {
-      axios.patch(`/user/${id}`, conFom).then((res) => {
+      axios.patch(`/user/resetPassword/${id}`, conFom).then((res) => {
         if (res.data.successMessage) {
           console.log(res.data.user);
           console.log("password successfully changed");

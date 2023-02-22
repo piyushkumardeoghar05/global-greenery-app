@@ -10,11 +10,12 @@ router.route("/login").post( userController.login);
 router.route("/logout").post(userController.isAuthenticated, userController.logout);
 // router.route("/:id").patch( userController.updateUser);
 router.patch("/:id", userController.isAuthenticated, userController.updateUser);
+router.patch("/resetPassword/:id", userController.updateUser);
 // router.route("/:id").delete(userController.deleteUser)
 router.delete("/:id", userController.isAuthenticated, userController.deleteUser);
 router.route("/getAllUsers").get(
   userController.isAuthenticated,
-  userController.isAdmin,
+  // userController.isAdmin,
   userController.getAllUser
 );
 // router.route("/:id").get( userController.getUserById);
