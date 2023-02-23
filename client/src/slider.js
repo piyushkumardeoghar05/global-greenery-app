@@ -27,7 +27,9 @@ const Slider = () => {
   //   },
   // ]
   return ( 
-    <div className="container mx-5" >
+    <>
+    <h1 className='title'>GALLERY</h1>
+    <div className="container" >
     <Carousel className={classes.container}>
       {data.map((e,i)=>{
         return(
@@ -43,6 +45,7 @@ const Slider = () => {
     
   </Carousel>
   </div>
+  </>
    );
 }
  

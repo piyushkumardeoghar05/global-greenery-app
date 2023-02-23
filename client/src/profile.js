@@ -27,6 +27,7 @@ import "./style.css";
 import { faPencil, faPenClip } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from "react-router-dom";
 import Signup from "./signup";
+import Navbar from "./navbar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 export default function PersonalProfile() {
   const navigate = useNavigate();
@@ -68,6 +69,8 @@ const handleLogout=()=>{
   })
 };
   return (
+    <>
+    <Navbar/>
     <section className="vh-100" style={{ backgroundColor: "#f4f5f7" }}>
       <MDBContainer className="py-5 h-100">
         <MDBRow className="justify-content-center align-items-center h-100">
@@ -171,5 +174,6 @@ const handleLogout=()=>{
         </MDBRow>
       </MDBContainer>
     </section>
+    </>
   );
 }

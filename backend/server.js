@@ -12,7 +12,7 @@ const corsOptions ={
 }
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(express.static('public/build'));
+// app.use(express.static('public/build'));
 const contactUsRouter = require("./Routes/contactUsRouter");
 const topThreeCardsRouter = require("./Routes/topThreeCardsRouter");
 const ourTeamRouter = require("./Routes/ourTeamRouter");
@@ -21,7 +21,7 @@ const galleryRouter = require("./Routes/galleryRouter");
 const testimonialsRouter = require("./Routes/testimonialsRouter");
 const uri = process.env.URI;
 // console.log(uri);
-const port = process.env.PORT || 5000;
+const port =  5000;
 mongoose
   .connect(uri)
   .then(() => {
