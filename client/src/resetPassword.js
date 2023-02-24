@@ -30,6 +30,7 @@ const ResetPassword = () => {
   const [initialimgLink, setInitialImgLink] = useState("");
   const [initialPhone, setInitialPhone] = useState("");
   const [error, setError] = useState("");
+  const [success,setSuccess] = useState(false);
   // const [initialEmail, setInitialEmail] = useState("");
   // console.log("upadte is going on");
   // try {
@@ -43,6 +44,7 @@ const ResetPassword = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
+    setSuccess(true);
     const { password, conpass } = e.target.elements;
     let conFom = {
       password: password.value,
@@ -55,9 +57,11 @@ const ResetPassword = () => {
         if (res.data.successMessage) {
           console.log(res.data.user);
           console.log("password successfully changed");
+          setSuccess(false);
           alert("Your Password has been changed");
           navigate(`/login`);
         } else {
+          setSuccess(false);
           setError(res.data.errorMessage);
         }
 
@@ -123,7 +127,45 @@ const ResetPassword = () => {
                           type="submit"
                           className="btn btn-primary btn-lg"
                         >
-                          Reset Password
+                          Reset Password {success && (
+                            <>
+                             <div
+                                style={{
+                                  textAlign: "center",
+                                  display: "inline",
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                <svg
+                                  style={{ width: "40px" }}
+                                  version="1.1"
+                                  id="L9"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                  x="0px"
+                                  y="0px"
+                                  viewBox="0 0 100 100"
+                                  enable-background="new 0 0 0 0"
+                                  xmlSpace="preserve"
+                                >
+                                  <path
+                                    fill="#fff"
+                                    d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+                                  >
+                                    <animateTransform
+                                      attributeName="transform"
+                                      attributeType="XML"
+                                      type="rotate"
+                                      dur="1s"
+                                      from="0 50 50"
+                                      to="360 50 50"
+                                      repeatCount="indefinite"
+                                    />
+                                  </path>
+                                </svg>
+                              </div>
+                            </>
+                          )}
                           {/* Register */}
                         </button>
                       </div>

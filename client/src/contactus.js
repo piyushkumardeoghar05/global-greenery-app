@@ -13,7 +13,7 @@ const ContactForm = () => {
   };
   const [iconTabs, setIconsTabs] = React.useState(1);
   const [textTabs, setTextTabs] = React.useState(4);
-
+ 
   const control = useAnimation();
   const [ref, inView] = useInView();
 

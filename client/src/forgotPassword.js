@@ -13,8 +13,10 @@ const ForgotPassword = () => {
   const [error, setError] = useState("");
   const [success,setSuccess] = useState("");
   const navigate = useNavigate();
+  const [issent,setIssent] = useState(false);
   const submitThis = async (e) => {
     e.preventDefault();
+    setIssent(true);
     const { email } = e.target.elements;
     let conFom = {
       email: email.value,
@@ -25,12 +27,14 @@ const ForgotPassword = () => {
       .then((res) => {
         if (res.data.successMessage) {
           console.log("code is sent on your email");
+          setIssent(false);
           setSuccess("Reset Link has been successfully sent to your registered Email Id,Please check your Email");
           // setId(res.data["user"]._id);
           //   navigate(`/profile/${res.data["user"]._id}`);
           setError(res.data.errorMessage);
         } else {
           console.log("Email not registered");
+          setIssent(false);
           setError(res.data.errorMessage);
           setSuccess("");
         }
@@ -80,7 +84,45 @@ useEffect(()=>{
                   type="submit"
                   className="btn btn-primary btn-lg btn-block"
                 >
-                  Send Reset Code
+                  Send Reset Code {issent && (
+                    <>
+                     <div
+                                style={{
+                                  textAlign: "center",
+                                  display: "inline",
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                <svg
+                                  style={{ width: "40px" }}
+                                  version="1.1"
+                                  id="L9"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                                  x="0px"
+                                  y="0px"
+                                  viewBox="0 0 100 100"
+                                  enable-background="new 0 0 0 0"
+                                  xmlSpace="preserve"
+                                >
+                                  <path
+                                    fill="#fff"
+                                    d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+                                  >
+                                    <animateTransform
+                                      attributeName="transform"
+                                      attributeType="XML"
+                                      type="rotate"
+                                      dur="1s"
+                                      from="0 50 50"
+                                      to="360 50 50"
+                                      repeatCount="indefinite"
+                                    />
+                                  </path>
+                                </svg>
+                              </div>
+                    </>
+                  )}
                 </button>
                 {/* {error && ( */}
                   <h5 style={{ color: "red" }}>

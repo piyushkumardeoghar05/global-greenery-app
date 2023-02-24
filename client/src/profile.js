@@ -39,7 +39,7 @@ export default function PersonalProfile() {
     axios.get(`/user/${id}`).then((res) => {
       console.log(res.data["user"]);
       if(!(res.data["user"])){
-        navigate(`/login`)
+        navigate(`*`)
       }
       setData(res.data["user"]);
     }).catch((err)=>{

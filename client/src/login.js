@@ -2,16 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "./api";
 import Navbar from "./navbar";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [passw, setPassw] = useState("");
   const [dataInput, setDataInput] = useState("");
   const [id, setId] = useState(null);
+  const [isSignIn, setIsSignIn] = useState(false);
   // const [error,setError] = useState(false)
-  const [error,setError] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const submitThis = async (e) => {
     e.preventDefault();
+    setIsSignIn(true);
     const { email, password } = e.target.elements;
     let conFom = {
       email: email.value,
@@ -29,14 +32,15 @@ const Login = () => {
         //   console.log("wrong user credentials");
         //   setError(true);
         // }
-        if(res.data.successMessage){
+        if (res.data.successMessage) {
           console.log(res.data["user"]._id);
           setId(res.data["user"]._id);
+          setIsSignIn(false);
           navigate(`/profile/${res.data["user"]._id}`);
-        }
-        else{
+        } else {
           console.log(res.data.errorMessage);
-          setError(res.data.errorMessage)
+          setIsSignIn(false);
+          setError(res.data.errorMessage);
         }
       })
       .catch((err) => console.log(err));
@@ -121,11 +125,31 @@ const Login = () => {
                   type="submit"
                   className="btn btn-primary btn-lg btn-block"
                 >
-                  Sign in
+                  <>Sign in</>
+                  {isSignIn &&
+                   (
+                    <>
+                      <div style={{textAlign:"center",display:"inline",marginLeft:"5px"}}>
+                 <svg style={{width: '40px'}} version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 100 100" enable-background="new 0 0 0 0" xmlSpace="preserve">
+                            <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                            <animateTransform 
+                                attributeName="transform" 
+                                attributeType="XML" 
+                                type="rotate"
+                                dur="1s" 
+                                from="0 50 50"
+                                to="360 50 50" 
+                                repeatCount="indefinite" />
+                        </path>
+                        </svg>
+                        </div>
+                    </>
+                  )}
                 </button>
                 {/* {error && <h5 style={{color:"red"}}>wrong user credentials</h5>} */}
-                <h5 style={{color:"red"}}>{error}</h5>
-                
+                <h5 style={{ color: "red" }}>{error}</h5>
+
                 {/* <Link
                   to={`/profile/${id}`}
                   type="button"
